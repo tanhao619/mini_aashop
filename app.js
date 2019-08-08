@@ -7,7 +7,7 @@ App({
     wx.setStorageSync('logs', logs)
   },
   globalData: {
-    userInfo: null,
+    userToken: null,
     serverIp: "http://10.9.4.78:18001"
   }
 })

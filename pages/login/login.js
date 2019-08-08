@@ -7,7 +7,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    userInfo: {},
+
   },
 
   formSubmit: function(param){
@@ -18,36 +18,52 @@ Page({
         userName: param.detail.value.userName,
         passWord: param.detail.value.passWord
         },
-      dataType:"json",
       method:"POST",
-      header: {'content-type': 'application/json'},
+      // header: {'content-type': 'application/json'},
+      header: {"Content-Type": "application/x-www-form-urlencoded"},
       success:function(data){
-        if(data.code == 200){
-          app.globalData.userInfo = data.data
-          console.log(app.globalData.userInfo)
+        if (data.data.code == 200){
+          app.globalData.userToken = data.data.result.data
+          wx.setStorage({
+            key: 'userToken',
+            data: data.data.result.data,
+          })
           wx.showToast({
             title: "登录成功",
             icon: 'success',
-            duration: 20000,
+            duration: 1500,
             success: function () {
               setTimeout(function () {
                 wx.navigateTo({
-                  url: '../teachers/teachers',
+                  url: '../list/list',
                 })
               }, 1000)
             }
           })
-        }else{
+        } else{
           wx.showToast({
-            title: data.msg,
+            title: data.data.message,
             icon: 'none',
-            duration: 2000,
+            duration: 1500,
           })
         }      
+      },fail: function(){
+        wx.showToast({
+          title: "登录失败",
+          icon: 'none',
+          duration: 1500,
+        })
       }
     })
   },
  
+  findpwd:function(param){
+    wx.showToast({
+      title: '请联系管理员',
+      icon:"none",
+      duration: 1500,
+    })
+  },
   /**
    * 生命周期函数--监听页面加载
    */
