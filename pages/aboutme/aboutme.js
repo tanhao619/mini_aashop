@@ -1,14 +1,14 @@
 // pages/aboutme/aboutme.js
 var app = getApp()
-Page({
 
+Page({
   /**
    * 页面的初始数据
    */
   data: {
     loading: true, // 显示等待框
-    userToken:"",
     info:{},
+    page: 1
   },
 
   /**
@@ -16,22 +16,7 @@ Page({
    */
   onLoad: function (options) {
     //从本地缓存拿userToken
-    wx.getStorageSync(key)({
-      key: 'userToken',
-      success: function (res) {
-        this.userToken = res.data
-      },
-      fail: function (res) {
-        wx.showToast({
-          title: '登录状态失效，请重新登录',
-          icon: "none",
-          duration: 1500
-        })
-        wx.navigateTo({
-          url: '../login/login',
-        })
-      },
-    })
+    var userToken = wx.getStorageSync("userToken") || []
     //userToken为空时返回登录界面
     if(this.userToken == ""){
       wx.showToast({
@@ -45,7 +30,25 @@ Page({
     }else{
       wx.request({//获取我的列表
         url: app.globalData.serverIp + "/api/v2/aashop/mylist",
-        
+        data:{page:this.data.page,
+              userToken: userToken},
+        success: function (data) {
+          if (data.data.code == 200) {
+            this.info = data.data.result.data
+          } else {
+            wx.showToast({
+              title: data.data.message,
+              icon: 'none',
+              duration: 1500,
+            })
+          }
+        }, fail: function () {
+          wx.showToast({
+            title: "获取数据失败",
+            icon: 'none',
+            duration: 1500,
+          })
+        }
       })
     }
   },
@@ -82,7 +85,9 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-
+    this.setData({
+      page = this.data.page + 1
+    })
   },
 
   /**

@@ -17,7 +17,7 @@ Page({
   onLoad: function (options) { // options 为 board页传来的参数
     const _this = this;
     // 拼接请求url
-    const url = 'https://api.douban.com/v2/movie/' + options.type;
+    const url = "";
     // 请求数据
     wx.request({
       url: url,

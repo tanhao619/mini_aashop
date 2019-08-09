@@ -35,7 +35,7 @@ Page({
             success: function () {
               setTimeout(function () {
                 wx.navigateTo({
-                  url: '../list/list',
+                  url: '../aboutme/aboutme',
                 })
               }, 1000)
             }

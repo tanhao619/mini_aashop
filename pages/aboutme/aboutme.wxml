@@ -1,5 +1,7 @@
 <!--pages/aboutme/aboutme.wxml-->
 <view class='container'>
   <!--等待框-->
-  <loading hidden="{{!loading}}">加载中...</loading>
-</<view>
+  <!-- <loading hidden="{{!loading}}">加载中...</loading> -->
+  我的：{{}}
+  他的：{{}}
+</view>
