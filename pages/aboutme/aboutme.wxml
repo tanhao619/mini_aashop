@@ -1,7 +1,10 @@
 <!--pages/aboutme/aboutme.wxml-->
-<view class='container'>
-  <!--等待框-->
-  <!-- <loading hidden="{{!loading}}">加载中...</loading> -->
-  我的：{{}}
-  他的：{{}}
+<view class='container' wx:for="{{info}}" wx:for-item="info" style="padding:50rpx 0">
+  <block wx:if="{{userToken == info.userToken}}">
+    我已付款：{{info.total}}元
+    <button id="{{userToken}}" bindtap="detailList">点击查看详情</button>
+  </block>
+  <block wx:else>
+    {{info.name}}已付款：{{info.total}}元
+  </block>
 </view>

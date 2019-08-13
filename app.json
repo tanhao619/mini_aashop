@@ -1,12 +1,12 @@
 {
   "pages": [
-    "pages/login/login",
     "pages/aboutme/aboutme",
+    "pages/login/login",
     "pages/list/list",
     "pages/index/index"
   ],
   "window": {
-    "backgroundTextStyle": "light",
+    "backgroundTextStyle": "dark",
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "AA记账",
     "navigationBarTextStyle": "black"
@@ -14,5 +14,6 @@
   "networkTimeout": {
     "request": 3000
   },
+  "enablePullDownRefresh": true,
   "sitemapLocation": "sitemap.json"
 }

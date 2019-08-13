@@ -7,8 +7,9 @@ Page({
    */
   data: {
     loading: true, // 显示等待框
-    info:{},
-    page: 1
+    info:[],
+    page: 1,
+    userToken:""
   },
 
   /**
@@ -16,7 +17,7 @@ Page({
    */
   onLoad: function (options) {
     //从本地缓存拿userToken
-    var userToken = wx.getStorageSync("userToken") || []
+    var userToken = wx.getStorageSync("userToken")
     //userToken为空时返回登录界面
     if(this.userToken == ""){
       wx.showToast({
@@ -28,13 +29,17 @@ Page({
         url: '../login/login',
       })
     }else{
+      var that = this
       wx.request({//获取我的列表
-        url: app.globalData.serverIp + "/api/v2/aashop/mylist",
-        data:{page:this.data.page,
+        url: app.globalData.serverIp + "/api/v2/aashop/everyonePay",
+        data:{page:that.data.page,
               userToken: userToken},
         success: function (data) {
           if (data.data.code == 200) {
-            this.info = data.data.result.data
+            that.setData({
+              info: data.data.result.datas || [],
+              userToken: userToken
+            })
           } else {
             wx.showToast({
               title: data.data.message,
@@ -51,6 +56,12 @@ Page({
         }
       })
     }
+  },
+
+  detailList:function(param){
+    wx.navigateTo({
+      url: '../list/list?' + param.currentTarget.id,
+    })
   },
 
   /**
@@ -86,7 +97,7 @@ Page({
    */
   onPullDownRefresh: function () {
     this.setData({
-      page = this.data.page + 1
+      page: this.data.page + 1
     })
   },
 

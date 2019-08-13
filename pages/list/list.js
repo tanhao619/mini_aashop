@@ -1,38 +1,51 @@
 // pages/list/list.js
+var app = getApp();
 Page({
-
   /**
     * 页面的初始数据
     */
   data: {
     title: '加载中...', // 状态
     list: [], // 数据列表
-    type: '', // 数据类型
-    loading: true // 显示等待框
+    loading: true, // 显示等待框
+    pagenum:1
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) { // options 为 board页传来的参数
-    const _this = this;
-    // 拼接请求url
-    const url = "";
+    const that = this;
+    //从本地缓存拿userToken
+    var userToken = wx.getStorageSync("userToken")
     // 请求数据
     wx.request({
-      url: url,
-      data: {},
-      header: {
-        'content-type': 'json' // 默认值
+      url: app.globalData.serverIp + "/api/v2/aashop/mylist",
+      data: {
+        userToken: userToken,
+        pagesize: 10,
+        pagenum:that.data.pagenum,
       },
-      success: function (res) {
-        console.log(res.data);
-        // 赋值
-        _this.setData({
-          title: res.data.title,
-          list: res.data.subjects,
-          type: options.type,
-          loading: false // 关闭等待框
+      method: "GET",
+      // header: {'content-type': 'application/json'},
+      header: { "Content-Type": "application/x-www-form-urlencoded" },
+      success: function (data) {
+        if (data.data.code == 200){
+          that.setData({
+            list: data.data.result.data.myList
+          })
+        } else {
+          wx.showToast({
+            title: data.data.message,
+            icon: 'none',
+            duration: 1500,
+          })
+        }
+      }, fail: function () {
+        wx.showToast({
+          title: "请求数据失败",
+          icon: 'none',
+          duration: 1500,
         })
       }
     })
@@ -70,14 +83,92 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-
+    // 显示顶部刷新图标
+    wx.showNavigationBarLoading();
+    var that = this;
+    that.setData({
+      pagenum: 1
+    })
+    //从本地缓存拿userToken
+    var userToken = wx.getStorageSync("userToken")
+    // 请求数据
+    wx.request({
+      url: app.globalData.serverIp + "/api/v2/aashop/mylist",
+      data: {
+        userToken: userToken,
+        pagesize: 10,
+        pagenum: that.data.pagenum,
+      },
+      method: "GET",
+      // header: {'content-type': 'application/json'},
+      header: { "Content-Type": "application/x-www-form-urlencoded" },
+      success: function (data) {
+        if (data.data.code == 200) {
+          that.setData({
+            list: data.data.result.data.myList
+          })
+          // 隐藏导航栏加载框
+          wx.hideNavigationBarLoading();
+          // 停止下拉动作
+          wx.stopPullDownRefresh();
+        } else {
+          wx.showToast({
+            title: data.data.message,
+            icon: 'none',
+            duration: 1500,
+          })
+        }
+      }, fail: function () {
+        wx.showToast({
+          title: "请求数据失败",
+          icon: 'none',
+          duration: 1500,
+        })
+      }
+    })
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
-
+    var that = this;
+    that.setData({
+      pagenum: that.data.pagenum + 1
+    })
+    //从本地缓存拿userToken
+    var userToken = wx.getStorageSync("userToken")
+    // 请求数据
+    wx.request({
+      url: app.globalData.serverIp + "/api/v2/aashop/mylist",
+      data: {
+        userToken: userToken,
+        pagesize: 10,
+        pagenum: that.data.pagenum,
+      },
+      method: "GET",
+      // header: {'content-type': 'application/json'},
+      header: { "Content-Type": "application/x-www-form-urlencoded" },
+      success: function (data) {
+        if (data.data.code == 200) {
+          that.setData({
+            list: data.data.result.data.myList
+          })
+        } else {
+          wx.showToast({
+            title: data.data.message,
+            icon: 'none',
+            duration: 1500,
+          })
+        }
+      }, fail: function () {
+        wx.showToast({
+          title: "请求数据失败",
+          icon: 'none',
+          duration: 1500,
+        })
+      }
+    })
   },
 
   /**
