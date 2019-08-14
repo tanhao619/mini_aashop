@@ -1,1 +1,25 @@
 /* pages/list/list.wxss */
+.table{
+  border: 1px solid #ccc;
+  width:100%;
+}
+
+.tr{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.th{
+font-weight: 900;
+background-color: gray;
+font-size: 14px;
+color: black;
+}
+
+.th,.td{
+  padding: 10rpx;
+  widows: 100%;
+  text-align: center;
+  border-bottom: 1px solid #ccc
+}

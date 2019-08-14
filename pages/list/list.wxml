@@ -1,14 +1,19 @@
 <!--pages/list/list.wxml-->
-<view class='container'>
   <!--等待框-->
   <!-- <loading hidden="{{!loading}}">加载中...</loading> -->
   <!--列表-->
-  <view class='page-body' wx:for="{{list}}" wx:key="id">
-        <view class='item'>
-          
-            <text class='title'>{{item.subject.title}}</text>
-            <text class='sub-title'>{{item.subject.original_title}}({{item.subject.year}})</text>
-          
+  <view class='table'>
+        <view class='tr'>
+            <view class="th">标题</view>
+            <view class="th">价格</view>
+            <view class="th">备注</view>
+            <view class="th">时间</view>
+        </view>
+        <view class='tr' wx:for="{{list}}" wx:key="id">
+            <view class="td">{{item.name}}</view>
+            <view class="td">{{item.price}}</view>
+            <view class="td">{{item.remake}}</view>
+            <view class="td">{{item.createTime}}</view>
         </view>
   </view>
-</view>
+

@@ -1,4 +1,7 @@
 <!--pages/aboutme/aboutme.wxml-->
+<view>
+  <button id="{{userToken}}" bindtap="insert">记账</button>
+</view>
 <view class='container' wx:for="{{info}}" wx:for-item="info" style="padding:50rpx 0">
   <block wx:if="{{userToken == info.userToken}}">
     我已付款：{{info.total}}元

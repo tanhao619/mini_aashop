@@ -58,12 +58,18 @@ Page({
     }
   },
 
+//查看付款详情
   detailList:function(param){
     wx.navigateTo({
       url: '../list/list?' + param.currentTarget.id,
     })
   },
 
+  insert: function (param) {
+    wx.navigateTo({
+      url: '../list/list?' + param.currentTarget.id,
+    })
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
