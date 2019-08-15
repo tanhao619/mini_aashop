@@ -1,12 +1,12 @@
 <!--pages/insert/insert.wxml-->
 <view class='container'>
   <view class='header'>
-    <text>新增账单</text>
+    <text>新增账单:</text>
   </view>
-  <form bindsubmit="formSubmit">
+  <form bindsubmit="insertSubmit">
     <view class='section'>
       <text>标题：</text>
-      <input type='number' placeholder='请输入标题' name="title"/>
+      <input type='text' placeholder='请输入标题' name="title"/>
     </view>
     <view class='section'>
       <text>价钱：</text>
@@ -14,18 +14,18 @@
     </view>
     <view class='section'>
       <text>备注:</text>
-      <input password='true' placeholder='请输入备注' name="remark"/>
+      <input type='text' placeholder='请输入备注' name="remark"/>
     </view>
     <view class="section">
-    <text>账单人员:</text>
-    <checkbox-group bindchange="checkboxChange">
-    <view wx:for="{{info}}" wx:for-item="info">
-        <block wx:if="{{userToken == info.userName}}">
-          <checkbox value='{{userToken}}' checked="true" disabled="true" >我</checkbox>
-        </block>
-        <block wx:else>
-          <checkbox value='{{info.userName}}'>{{info.name}}</checkbox>
-        </block>
+    <text>包含人员:</text>
+    <checkbox-group name="checkbox">
+      <view wx:for="{{info}}" wx:for-item="info">
+          <label wx:if="{{userToken == info.userName}}">
+            <checkbox value='{{userToken}}' checked="true" disabled="true" >我</checkbox>
+          </label>
+          <label wx:else>
+            <checkbox value='{{info.userName}}'>{{info.name}}</checkbox>
+          </label>
       </view>
       </checkbox-group>
     </view>

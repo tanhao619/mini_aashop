@@ -1,6 +1,6 @@
 // pages/insert/insert.js
+var app = getApp()
 Page({
-
   /**
    * 页面的初始数据
    */
@@ -9,31 +9,31 @@ Page({
       info:[]
   },
 
-  formSubmit: function (param) {
+  insertSubmit: function (param) {
+    var that = this;
+    var checkbox = param.detail.value.checkbox;
+    var containPeople = checkbox.join(",");
     wx.request({
-      url: app.globalData.serverIp + "/api/v2/aashop/login",
+      url: app.globalData.serverIp + "/api/v2/aashop/insert",
       data: {
-        userName: param.detail.value.userName,
-        passWord: param.detail.value.passWord
+        name: param.detail.value.title,
+        price: param.detail.value.price,
+        remark: param.detail.value.remark,
+        userToken: that.data.userToken,
+        containPeople: containPeople
       },
       method: "POST",
-      // header: {'content-type': 'application/json'},
-      header: { "Content-Type": "application/x-www-form-urlencoded" },
+      header: {'content-type': 'application/json'},
       success: function (data) {
         if (data.data.code == 200) {
-          app.globalData.userToken = data.data.result.data
-          wx.setStorage({
-            key: 'userToken',
-            data: data.data.result.data,
-          })
           wx.showToast({
-            title: "登录成功",
+            title: "新增成功",
             icon: 'success',
             duration: 1500,
             success: function () {
               setTimeout(function () {
                 wx.navigateTo({
-                  url: '../aboutme/aboutme',
+                  url: '../aboutme/aboutme?',
                 })
               }, 1000)
             }
@@ -47,7 +47,7 @@ Page({
         }
       }, fail: function () {
         wx.showToast({
-          title: "登录失败",
+          title: "新增失败",
           icon: 'none',
           duration: 1500,
         })
@@ -59,15 +59,21 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    var that = this;
+    var userToken = that.data.userToken;
+    if (userToken.length < 1){
+      that.setData({
+        userToken: wx.getStorageSync("userToken")
+      })
+    }
       wx.request({
         url: app.globalData.serverIp + "/api/v2/aashop/peopleDetail",
         method: "GET",
         header: { "Content-Type": "application/x-www-form-urlencoded" },
         success: function (data) {
           if (data.data.code == 200) {
-            this.setData({
-              userToken: wx.getStorageSync("userToken"),
-              info:data.data.result.data
+            that.setData({
+              info:data.data.result.datas
             })
           } else {
             wx.showToast({

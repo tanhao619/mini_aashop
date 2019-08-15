@@ -19,15 +19,22 @@ Page({
     //从本地缓存拿userToken
     var userToken = wx.getStorageSync("userToken")
     //userToken为空时返回登录界面
-    if(this.userToken == ""){
-      wx.showToast({
-        title: '登录状态失效，请重新登录',
-        icon: "none",
-        duration: 1500
-      })
-      wx.navigateTo({
-        url: '../login/login',
-      })
+    if (userToken == "" || userToken == undefined){
+      userToken = app.globalData.userToken
+      if (userToken == "" || userToken == undefined) {
+        wx.showToast({
+          title: '登录状态失效，请重新登录',
+          icon: "none",
+          duration: 1500
+        })
+        wx.navigateTo({
+          url: '../login/login',
+        })
+      }else{
+        this.setData({
+          userToken: userToken
+        })
+      }
     }else{
       var that = this
       wx.request({//获取我的列表
@@ -67,7 +74,7 @@ Page({
 
   insert: function (param) {
     wx.navigateTo({
-      url: '../list/list?' + param.currentTarget.id,
+      url: '../insert/insert?' + param.currentTarget.id,
     })
   },
   /**
